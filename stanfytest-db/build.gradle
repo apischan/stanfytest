@@ -52,8 +52,8 @@ jooq {
                 fluentSetters = true
             }
             target {
-                packageName = 'com.apischan.stanfytest'
-                directory = 'src/main/generated'
+                packageName = 'com.apischan.stanfytest.jooq'
+                directory = 'src/main/java'
             }
         }
     }
