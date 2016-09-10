@@ -1,4 +1,18 @@
 package com.apischan.stanfytest.repository;
 
-public class SkillRepository {
+import com.apischan.stanfytest.dto.SkillDto;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface SkillRepository {
+
+    /**
+     * Get skill instance id by it's name
+     *
+     * @param name skill name
+     * @return optional of skill instance id
+     */
+    Optional<Integer> getSkillIdByName(String name);
+
 }

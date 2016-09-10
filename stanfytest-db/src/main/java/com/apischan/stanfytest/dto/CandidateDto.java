@@ -12,6 +12,6 @@ public class CandidateDto {
 
     private @NonNull String firstname;
     private @NonNull String lastname;
-    private List<String> skills;
+    private List<SkillDto> skills;
 
 }

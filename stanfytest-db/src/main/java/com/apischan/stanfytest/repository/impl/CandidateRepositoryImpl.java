@@ -1,8 +1,9 @@
-package com.apischan.stanfytest.repository;
+package com.apischan.stanfytest.repository.impl;
 import com.apischan.stanfytest.dto.SkillDto;
 import com.apischan.stanfytest.exceptions.EntryNotFoundException;
 import com.apischan.stanfytest.exceptions.JobsException;
 import com.apischan.stanfytest.dto.CandidateDto;
+import com.apischan.stanfytest.repository.CandidateRepository;
 import com.apischan.stanfytest.repository.util.ConnectionProvider;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
@@ -29,10 +30,7 @@ public class CandidateRepositoryImpl implements CandidateRepository {
     }
 
     /**
-     * Get candidate by id
-     *
-     * @param id identifier of candidate
-     * @return candidate dto
+     * {@inheritDoc}
      */
     @Transactional
     public CandidateDto getCandidateById(int id) {
@@ -53,11 +51,7 @@ public class CandidateRepositoryImpl implements CandidateRepository {
                     .fetch()
                     .stream()
                     .collect(groupingBy(
-                            r -> {
-                                String firstname = r.getValue(CANDIDATE.FIRSTNAME, String.class);
-                                String lastname = r.getValue(CANDIDATE.LASTNAME, String.class);
-                                return new CandidateDto(firstname, lastname);
-                            },
+                            r -> new CandidateDto(r.getValue(CANDIDATE.FIRSTNAME), r.getValue(CANDIDATE.LASTNAME)),
                             mapping(r -> new SkillDto(r.getValue(SKILL.NAME, String.class)), toList())
                     ));
 
