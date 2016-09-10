@@ -4,11 +4,12 @@ import com.apischan.stanfytest.exceptions.EntryNotFoundException;
 import com.apischan.stanfytest.exceptions.JobsException;
 import com.apischan.stanfytest.dto.CandidateDto;
 import com.apischan.stanfytest.repository.CandidateRepository;
-import com.apischan.stanfytest.repository.util.ConnectionProvider;
+import com.apischan.stanfytest.repository.SkillRepository;
+import com.apischan.stanfytest.repository.util.JooqConnectionProvider;
 import com.google.inject.Inject;
-import com.google.inject.persist.Transactional;
 import org.jooq.DSLContext;
 import org.jooq.Record3;
+import org.jooq.SQLDialect;
 import org.jooq.SelectOnConditionStep;
 
 import java.sql.Connection;
@@ -22,20 +23,19 @@ import static org.jooq.impl.DSL.*;
 
 public class CandidateRepositoryImpl implements CandidateRepository {
 
-    private ConnectionProvider connectionProvider;
+    private JooqConnectionProvider connectionProvider;
+    private SkillRepository skillRepository;
 
     @Inject
-    private CandidateRepositoryImpl(ConnectionProvider connectionProvider) {
+    private CandidateRepositoryImpl(JooqConnectionProvider connectionProvider,
+                                    SkillRepository skillRepository) {
         this.connectionProvider = connectionProvider;
+        this.skillRepository = skillRepository;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Transactional
+    @Override
     public CandidateDto getCandidateById(int id) {
-        try (Connection connection = connectionProvider.getConnection()) {
-            DSLContext create = using(connection);
+        try (DSLContext create = using(connectionProvider, SQLDialect.POSTGRES_9_3)) {
             SelectOnConditionStep<Record3<String, String, String>> query = create
                     .select(
                             CANDIDATE.FIRSTNAME,
@@ -55,14 +55,16 @@ public class CandidateRepositoryImpl implements CandidateRepository {
                             mapping(r -> new SkillDto(r.getValue(SKILL.NAME, String.class)), toList())
                     ));
 
-            connection.close();
-
             return convertToCandidateDto(result)
                     .findFirst()
                     .orElseThrow(() -> new EntryNotFoundException("Candidate with such id not found."));
-        } catch (SQLException e) {
-            throw new JobsException(e);
         }
+
+    }
+
+    @Override
+    public void saveCandidate(CandidateDto candidate) {
+
     }
 
     private Stream<CandidateDto> convertToCandidateDto(Map<CandidateDto, List<SkillDto>> result) {

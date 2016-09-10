@@ -2,7 +2,6 @@ package com.apischan.stanfytest.repository;
 
 import com.apischan.stanfytest.dto.SkillDto;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface SkillRepository {
@@ -14,5 +13,12 @@ public interface SkillRepository {
      * @return optional of skill instance id
      */
     Optional<Integer> getSkillIdByName(String name);
+
+    /**
+     * Insert new skill into database
+     *
+     * @param skill skill dto
+     */
+    void saveSkill(SkillDto skill);
 
 }
