@@ -1,0 +1,21 @@
+version: '2'
+
+volumes:
+  pg_data:
+
+
+services:
+  postgres_jobs:
+    build:
+      context: ../stanfytest-db
+    image: docker_posgresql
+    container_name: postgres_jobs
+    volumes:
+      - pg_data:/var/lib/postgresql/data/pgdata
+    environment:
+      POSTGRES_USER: jobsuser
+      POSTGRES_PASSWORD: mysecretpassword
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: jobsdb
+    ports:
+      - 12658:5432

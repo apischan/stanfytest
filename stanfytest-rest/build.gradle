@@ -1,0 +1,25 @@
+group 'com.apischan.stanfytest'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "io.ratpack:ratpack-gradle:1.4.1"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+    }
+}
+
+apply plugin: "io.ratpack.ratpack-java"
+apply plugin: 'com.github.johnrengelman.shadow'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+
+}
+
+mainClassName = 'com.apischan.stanfytest.Main'

@@ -1,0 +1,4 @@
+rootProject.name = 'stanfytest'
+include 'stanfytest-rest'
+include 'stanfytest-db'
+
