@@ -17,5 +17,12 @@ public interface SkillRepository {
      */
     Optional<Integer> getSkillIdByName(String name, DSLContext context);
 
+    /**
+     * Save skill record into database
+     *
+     * @param skill skill dto
+     * @param context query context with transaction
+     * @return instance id of inserted skill
+     */
     Integer saveSkill(SkillDto skill, DSLContext context);
 }
