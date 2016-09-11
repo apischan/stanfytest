@@ -14,7 +14,6 @@ import org.jooq.SelectOnConditionStep;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -52,8 +51,8 @@ public class CandidateRepositoryImpl implements CandidateRepository {
                     .fetch()
                     .stream()
                     .collect(groupingBy(
-                            r -> new CandidateDto(r.getValue(CANDIDATE.FIRSTNAME), r.getValue(CANDIDATE.LASTNAME)),
-                            mapping(r -> new SkillDto(r.getValue(SKILL.NAME, String.class)), toList())
+                            r -> CandidateDto.of(r.getValue(CANDIDATE.FIRSTNAME), r.getValue(CANDIDATE.LASTNAME)),
+                            mapping(r -> SkillDto.of(r.getValue(SKILL.NAME, String.class)), toList())
                     ));
 
             return convertToCandidateDto(result)
@@ -71,14 +70,10 @@ public class CandidateRepositoryImpl implements CandidateRepository {
                         Integer candidateId = saveCandidate(candidate, context);
 
                         candidate.getSkills().forEach((skill) -> {
-                            Optional<Integer> skillIdOpt = skillRepository.getSkillIdByName(skill.getSkillName(), context);
-                            Integer skillId;
-                            if (skillIdOpt.isPresent()) {
-                                skillId = skillIdOpt.get();
-                            } else {
-                                skillId = skillRepository.saveSkill(skill, context);
+                            if (skill.getId() == null) {
+                                skill.setId(skillRepository.saveSkill(skill, context));
                             }
-                            saveCandidateSkill(candidateId, skillId, context);
+                            saveCandidateSkill(candidateId, skill.getId(), context);
                         });
 
                     }

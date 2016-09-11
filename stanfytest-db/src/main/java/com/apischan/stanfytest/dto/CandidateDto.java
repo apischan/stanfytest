@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
+@RequiredArgsConstructor(staticName = "of")
 public class CandidateDto {
 
     private Integer id;
