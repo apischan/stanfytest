@@ -1,8 +1,11 @@
 package com.apischan.stanfytest.repository;
 
 import com.apischan.stanfytest.dto.SkillDto;
+import org.jooq.DSLContext;
 
 import java.util.Optional;
+
+import static com.apischan.stanfytest.jooq.Tables.SKILL;
 
 public interface SkillRepository {
 
@@ -12,13 +15,7 @@ public interface SkillRepository {
      * @param name skill name
      * @return optional of skill instance id
      */
-    Optional<Integer> getSkillIdByName(String name);
+    Optional<Integer> getSkillIdByName(String name, DSLContext context);
 
-    /**
-     * Insert new skill into database
-     *
-     * @param skill skill dto
-     */
-    void saveSkill(SkillDto skill);
-
+    Integer saveSkill(SkillDto skill, DSLContext context);
 }
