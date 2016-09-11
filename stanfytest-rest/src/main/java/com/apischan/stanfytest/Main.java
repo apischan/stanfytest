@@ -12,6 +12,7 @@ import static com.apischan.stanfytest.handler.SkillHandlers.*;
 @Slf4j
 public class Main {
     public static void main(String... args) throws Exception {
+        log.info("Starting the application....");
         RatpackServer.start(server -> server
                 .registry(Guice.registry(bindings -> {
                     bindings.module(ServiceModule.class);
@@ -19,12 +20,13 @@ public class Main {
                 }))
                 .handlers(chain -> chain
                         // candidate endpoints
-                        .get("candidate", AllCandidatesHandler.class)
-                        .get("candidate/:id", CandidateByIdHandler.class)
+                        .get("candidates", AllCandidatesHandler.class)
+                        .get("candidates/:id", CandidateByIdHandler.class)
+                        .post("candidate", StoreCandidateHandler.class)
 
                         // skill endpoints
-                        .get("skill", SkillByQueryHandler.class)
-                        .get("skill/:id", SkillByIdHandler.class)
+                        .get("skills", SkillByQueryHandler.class)
+                        .get("skills/:id", SkillByIdHandler.class)
                 )
         );
     }

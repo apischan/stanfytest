@@ -19,4 +19,11 @@ public interface CandidateService {
      * @return candidate dto
      */
     CandidateDto getCandidateById(Integer id);
+
+    /**
+     * Store candidate into database
+     *
+     * @param candidate candidate dto
+     */
+    void saveCandidate(CandidateDto candidate);
 }

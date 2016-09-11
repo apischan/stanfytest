@@ -15,6 +15,7 @@ public class ServiceModule extends AbstractModule {
         bind(CandidateService.class).to(CandidateServiceImpl.class);
         bind(AllCandidatesHandler.class);
         bind(CandidateByIdHandler.class);
+        bind(StoreCandidateHandler.class);
 
         bind(SkillService.class).to(SkillServiceImpl.class);
         bind(SkillByIdHandler.class);

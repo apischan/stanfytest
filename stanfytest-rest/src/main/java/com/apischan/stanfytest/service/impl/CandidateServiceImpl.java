@@ -25,4 +25,9 @@ public class CandidateServiceImpl implements CandidateService {
     public CandidateDto getCandidateById(Integer id) {
         return candidateRepository.getCandidateById(id);
     }
+
+    @Override
+    public void saveCandidate(CandidateDto candidate) {
+        candidateRepository.saveCandidate(candidate);
+    }
 }
