@@ -7,10 +7,7 @@ import com.apischan.stanfytest.repository.CandidateRepository;
 import com.apischan.stanfytest.repository.SkillRepository;
 import com.apischan.stanfytest.repository.util.JooqConnectionProvider;
 import com.google.inject.Inject;
-import org.jooq.DSLContext;
-import org.jooq.Record3;
-import org.jooq.SQLDialect;
-import org.jooq.SelectOnConditionStep;
+import org.jooq.*;
 
 import java.util.List;
 import java.util.Map;
@@ -36,10 +33,12 @@ public class CandidateRepositoryImpl implements CandidateRepository {
     @Override
     public CandidateDto getCandidateById(int id) {
         try (DSLContext create = using(connectionProvider, SQLDialect.POSTGRES_9_3)) {
-            SelectOnConditionStep<Record3<String, String, String>> query = create
+            SelectOnConditionStep<Record5<Integer, String, String, Integer, String>> query = create
                     .select(
+                            CANDIDATE.ID,
                             CANDIDATE.FIRSTNAME,
                             CANDIDATE.LASTNAME,
+                            SKILL.ID,
                             SKILL.NAME)
                     .from(CANDIDATE)
                     .innerJoin(CANDIDATE_SKILL)
@@ -47,19 +46,39 @@ public class CandidateRepositoryImpl implements CandidateRepository {
                     .innerJoin(SKILL)
                     .on(SKILL.ID.eq(CANDIDATE_SKILL.SKILL_ID));
 
-            Map<CandidateDto, List<SkillDto>> result = query
-                    .fetch()
-                    .stream()
-                    .collect(groupingBy(
-                            r -> CandidateDto.of(r.getValue(CANDIDATE.FIRSTNAME), r.getValue(CANDIDATE.LASTNAME)),
-                            mapping(r -> SkillDto.of(r.getValue(SKILL.NAME, String.class)), toList())
-                    ));
+            Map<CandidateDto, List<SkillDto>> groupedCandidates = groupCandidates(query);
 
-            return convertToCandidateDto(result)
+            return convertToCandidateDto(groupedCandidates)
                     .findFirst()
                     .orElseThrow(() -> new EntryNotFoundException("Candidate with such id not found."));
         }
 
+    }
+
+    @Override
+    public List<CandidateDto> getAllCandidates() {
+        try (DSLContext create = using(connectionProvider, SQLDialect.POSTGRES_9_3)) {
+            create.transactionResult(configuration -> {
+                SelectOnConditionStep<Record5<Integer, String, String, Integer, String>> query = using(configuration)
+                        .select(
+                                CANDIDATE.ID,
+                                CANDIDATE.FIRSTNAME,
+                                CANDIDATE.LASTNAME,
+                                SKILL.ID,
+                                SKILL.NAME)
+                        .from(CANDIDATE)
+                        .innerJoin(CANDIDATE_SKILL)
+                        .on(CANDIDATE.ID.eq(CANDIDATE_SKILL.CANDIDATE_ID))
+                        .innerJoin(SKILL)
+                        .on(SKILL.ID.eq(CANDIDATE_SKILL.SKILL_ID));
+
+                Map<CandidateDto, List<SkillDto>> groupedCandidates = groupCandidates(query);
+
+                return convertToCandidateDto(groupedCandidates)
+                        .collect(toList());
+            });
+        }
+        return null;
     }
 
     @Override
@@ -79,6 +98,24 @@ public class CandidateRepositoryImpl implements CandidateRepository {
                     }
             );
         }
+    }
+
+    private Map<CandidateDto, List<SkillDto>> groupCandidates(
+            SelectOnConditionStep<Record5<Integer, String, String, Integer, String>> query) {
+        return query
+                .fetch()
+                .stream()
+                .collect(groupingBy(
+                        r -> CandidateDto.of(
+                                r.getValue(CANDIDATE.ID),
+                                r.getValue(CANDIDATE.FIRSTNAME),
+                                r.getValue(CANDIDATE.LASTNAME)
+                        ),
+                        mapping(r -> SkillDto.of(
+                                r.getValue(SKILL.ID),
+                                r.getValue(SKILL.NAME, String.class)
+                        ), toList())
+                ));
     }
 
     private void saveCandidateSkill(Integer candidateId, Integer skillId, DSLContext context) {

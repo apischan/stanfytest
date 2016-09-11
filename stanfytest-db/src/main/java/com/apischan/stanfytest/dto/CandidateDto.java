@@ -9,7 +9,7 @@ import java.util.List;
 @RequiredArgsConstructor(staticName = "of")
 public class CandidateDto {
 
-    private Integer id;
+    private @NonNull Integer id;
     private @NonNull String firstname;
     private @NonNull String lastname;
     private List<SkillDto> skills;
