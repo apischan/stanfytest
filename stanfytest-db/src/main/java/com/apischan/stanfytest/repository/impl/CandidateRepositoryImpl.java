@@ -11,6 +11,7 @@ import org.jooq.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -33,7 +34,7 @@ public class CandidateRepositoryImpl implements CandidateRepository {
     @Override
     public CandidateDto getCandidateById(int id) {
         try (DSLContext create = using(connectionProvider, SQLDialect.POSTGRES_9_3)) {
-            return create.transactionResult(configuration -> {
+            Optional<CandidateDto> candidateDto = create.transactionResult(configuration -> {
                 SelectOnConditionStep<Record5<Integer, String, String, Integer, String>> query = using(configuration)
                         .select(
                                 CANDIDATE.ID,
@@ -50,9 +51,9 @@ public class CandidateRepositoryImpl implements CandidateRepository {
                 Map<CandidateDto, List<SkillDto>> groupedCandidates = groupCandidates(query);
 
                 return convertToCandidateDto(groupedCandidates)
-                        .findFirst()
-                        .orElseThrow(() -> new EntryNotFoundException("Candidate with such id not found."));
+                        .findFirst();
             });
+            return candidateDto.orElseThrow(() -> new EntryNotFoundException("Candidate with such id not found."));
         }
     }
 
