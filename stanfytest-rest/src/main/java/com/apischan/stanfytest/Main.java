@@ -7,6 +7,7 @@ import ratpack.guice.Guice;
 import ratpack.server.RatpackServer;
 
 import static com.apischan.stanfytest.handler.CandidateHandlers.*;
+import static com.apischan.stanfytest.handler.SkillHandlers.*;
 
 @Slf4j
 public class Main {
@@ -21,6 +22,9 @@ public class Main {
                         .get("candidate", AllCandidatesHandler.class)
                         .get("candidate/:id", CandidateByIdHandler.class)
 
+                        // skill endpoints
+                        .get("skill", SkillByQueryHandler.class)
+                        .get("skill/:id", SkillByIdHandler.class)
                 )
         );
     }

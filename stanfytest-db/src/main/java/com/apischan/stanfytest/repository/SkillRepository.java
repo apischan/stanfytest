@@ -3,6 +3,8 @@ package com.apischan.stanfytest.repository;
 import com.apischan.stanfytest.dto.SkillDto;
 import org.jooq.DSLContext;
 
+import java.util.List;
+
 public interface SkillRepository {
 
     /**
@@ -23,4 +25,11 @@ public interface SkillRepository {
      * @return instance id of inserted skill
      */
     Integer saveSkill(SkillDto skill, DSLContext context);
+
+    /**
+     * Retrieve all skill dtos from database
+     *
+     * @return all skill dtos from database
+     */
+    List<SkillDto> getAllSkills();
 }

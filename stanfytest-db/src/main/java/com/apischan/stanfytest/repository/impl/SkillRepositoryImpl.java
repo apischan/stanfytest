@@ -9,9 +9,11 @@ import org.jooq.DSLContext;
 import org.jooq.Record2;
 import org.jooq.SQLDialect;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.apischan.stanfytest.jooq.Tables.SKILL;
+import static java.util.stream.Collectors.*;
 import static org.jooq.impl.DSL.using;
 
 public class SkillRepositoryImpl implements SkillRepository {
@@ -61,5 +63,19 @@ public class SkillRepositoryImpl implements SkillRepository {
                 .returning(SKILL.ID)
                 .fetchOne()
                 .getId();
+    }
+
+    @Override
+    public List<SkillDto> getAllSkills() {
+        try (DSLContext create = using(connectionProvider, SQLDialect.POSTGRES_9_3)) {
+            return create.transactionResult(configuration ->
+                    using(configuration)
+                    .select(SKILL.ID, SKILL.NAME)
+                    .from(SKILL)
+                    .fetch().stream()
+                    .map(record -> SkillDto.of(record.getValue(SKILL.ID), record.getValue(SKILL.NAME)))
+                    .collect(toList())
+            );
+        }
     }
 }
