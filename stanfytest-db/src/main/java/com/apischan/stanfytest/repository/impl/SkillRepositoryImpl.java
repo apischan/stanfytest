@@ -4,7 +4,6 @@ import com.apischan.stanfytest.dto.SkillDto;
 import com.apischan.stanfytest.exceptions.EntryNotFoundException;
 import com.apischan.stanfytest.repository.SkillRepository;
 import com.apischan.stanfytest.repository.util.JooqConnectionProvider;
-import com.apischan.stanfytest.repository.util.PostgreConnectionProvider;
 import com.google.inject.Inject;
 import org.jooq.DSLContext;
 import org.jooq.Record2;
