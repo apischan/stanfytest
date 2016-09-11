@@ -17,7 +17,10 @@ public class Main {
                     bindings.module(DatabaseModule.class);
                 }))
                 .handlers(chain -> chain
+                        // candidate endpoints
                         .get("candidate", AllCandidatesHandler.class)
+                        .get("candidate/:id", CandidateByIdHandler.class)
+
                 )
         );
     }

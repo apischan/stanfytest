@@ -27,4 +27,20 @@ public final class CandidateHandlers {
             ctx.render(json(candidateService.getAllCandidates()));
         }
     }
+
+    @Singleton
+    public static class CandidateByIdHandler implements Handler {
+
+        private final CandidateService candidateService;
+
+        @Inject
+        public CandidateByIdHandler(CandidateService candidateService) {
+            this.candidateService = candidateService;
+        }
+        @Override
+        public void handle(Context ctx) throws Exception {
+            Integer id = Integer.valueOf(ctx.getPathTokens().get("id"));
+            ctx.render(json(candidateService.getCandidateById(id)));
+        }
+    }
 }

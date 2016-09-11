@@ -20,4 +20,9 @@ public class CandidateServiceImpl implements CandidateService {
     public List<CandidateDto> getAllCandidates() {
         return candidateRepository.getAllCandidates();
     }
+
+    @Override
+    public CandidateDto getCandidateById(Integer id) {
+        return candidateRepository.getCandidateById(id);
+    }
 }
