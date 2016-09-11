@@ -33,32 +33,33 @@ public class CandidateRepositoryImpl implements CandidateRepository {
     @Override
     public CandidateDto getCandidateById(int id) {
         try (DSLContext create = using(connectionProvider, SQLDialect.POSTGRES_9_3)) {
-            SelectOnConditionStep<Record5<Integer, String, String, Integer, String>> query = create
-                    .select(
-                            CANDIDATE.ID,
-                            CANDIDATE.FIRSTNAME,
-                            CANDIDATE.LASTNAME,
-                            SKILL.ID,
-                            SKILL.NAME)
-                    .from(CANDIDATE)
-                    .innerJoin(CANDIDATE_SKILL)
-                    .on(CANDIDATE.ID.eq(CANDIDATE_SKILL.CANDIDATE_ID)).and(CANDIDATE.ID.eq(id))
-                    .innerJoin(SKILL)
-                    .on(SKILL.ID.eq(CANDIDATE_SKILL.SKILL_ID));
+            return create.transactionResult(configuration -> {
+                SelectOnConditionStep<Record5<Integer, String, String, Integer, String>> query = using(configuration)
+                        .select(
+                                CANDIDATE.ID,
+                                CANDIDATE.FIRSTNAME,
+                                CANDIDATE.LASTNAME,
+                                SKILL.ID,
+                                SKILL.NAME)
+                        .from(CANDIDATE)
+                        .innerJoin(CANDIDATE_SKILL)
+                        .on(CANDIDATE.ID.eq(CANDIDATE_SKILL.CANDIDATE_ID)).and(CANDIDATE.ID.eq(id))
+                        .innerJoin(SKILL)
+                        .on(SKILL.ID.eq(CANDIDATE_SKILL.SKILL_ID));
 
-            Map<CandidateDto, List<SkillDto>> groupedCandidates = groupCandidates(query);
+                Map<CandidateDto, List<SkillDto>> groupedCandidates = groupCandidates(query);
 
-            return convertToCandidateDto(groupedCandidates)
-                    .findFirst()
-                    .orElseThrow(() -> new EntryNotFoundException("Candidate with such id not found."));
+                return convertToCandidateDto(groupedCandidates)
+                        .findFirst()
+                        .orElseThrow(() -> new EntryNotFoundException("Candidate with such id not found."));
+            });
         }
-
     }
 
     @Override
     public List<CandidateDto> getAllCandidates() {
         try (DSLContext create = using(connectionProvider, SQLDialect.POSTGRES_9_3)) {
-            create.transactionResult(configuration -> {
+            return create.transactionResult(configuration -> {
                 SelectOnConditionStep<Record5<Integer, String, String, Integer, String>> query = using(configuration)
                         .select(
                                 CANDIDATE.ID,
@@ -78,7 +79,6 @@ public class CandidateRepositoryImpl implements CandidateRepository {
                         .collect(toList());
             });
         }
-        return null;
     }
 
     @Override
