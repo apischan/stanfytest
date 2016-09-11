@@ -32,7 +32,7 @@ public class CandidateRepositoryImpl implements CandidateRepository {
     }
 
     @Override
-    public CandidateDto getCandidateById(int id) {
+    public CandidateDto getCandidateById(Integer id) {
         try (DSLContext create = using(connectionProvider, SQLDialect.POSTGRES_9_3)) {
             Optional<CandidateDto> candidateDto = create.transactionResult(configuration -> {
                 SelectOnConditionStep<Record5<Integer, String, String, Integer, String>> query = using(configuration)

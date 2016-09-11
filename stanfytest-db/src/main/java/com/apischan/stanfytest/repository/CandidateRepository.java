@@ -12,7 +12,7 @@ public interface CandidateRepository {
      * @param id identifier of candidate
      * @return candidate dto
      */
-    CandidateDto getCandidateById(int id);
+    CandidateDto getCandidateById(Integer id);
 
     /**
      * Fetch all candidates with their skills from database
