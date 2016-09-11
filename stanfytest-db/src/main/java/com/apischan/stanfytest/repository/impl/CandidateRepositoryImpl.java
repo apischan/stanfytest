@@ -33,7 +33,7 @@ public class CandidateRepositoryImpl implements CandidateRepository {
 
     @Override
     public CandidateDto getCandidateById(Integer id) {
-        try (DSLContext create = using(connectionProvider, SQLDialect.POSTGRES_9_3)) {
+        try (DSLContext create = using(connectionProvider, connectionProvider.getSqlDialect())) {
             Optional<CandidateDto> candidateDto = create.transactionResult(configuration -> {
                 SelectOnConditionStep<Record5<Integer, String, String, Integer, String>> query = using(configuration)
                         .select(
@@ -59,7 +59,7 @@ public class CandidateRepositoryImpl implements CandidateRepository {
 
     @Override
     public List<CandidateDto> getAllCandidates() {
-        try (DSLContext create = using(connectionProvider, SQLDialect.POSTGRES_9_3)) {
+        try (DSLContext create = using(connectionProvider, connectionProvider.getSqlDialect())) {
             return create.transactionResult(configuration -> {
                 SelectOnConditionStep<Record5<Integer, String, String, Integer, String>> query = using(configuration)
                         .select(

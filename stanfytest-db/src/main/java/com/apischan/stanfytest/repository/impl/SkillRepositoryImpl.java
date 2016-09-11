@@ -3,8 +3,9 @@ package com.apischan.stanfytest.repository.impl;
 import com.apischan.stanfytest.dto.SkillDto;
 import com.apischan.stanfytest.exceptions.EntryNotFoundException;
 import com.apischan.stanfytest.repository.SkillRepository;
+import com.apischan.stanfytest.repository.util.JooqConnectionProvider;
+import com.apischan.stanfytest.repository.util.PostgreConnectionProvider;
 import com.google.inject.Inject;
-import org.jooq.ConnectionProvider;
 import org.jooq.DSLContext;
 import org.jooq.Record2;
 import org.jooq.SQLDialect;
@@ -18,16 +19,16 @@ import static org.jooq.impl.DSL.using;
 
 public class SkillRepositoryImpl implements SkillRepository {
 
-    private ConnectionProvider connectionProvider;
+    private JooqConnectionProvider connectionProvider;
 
     @Inject
-    public SkillRepositoryImpl(ConnectionProvider connectionProvider) {
+    public SkillRepositoryImpl(JooqConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
     }
 
     @Override
     public SkillDto getSkillByName(String name) {
-        try (DSLContext create = using(connectionProvider, SQLDialect.POSTGRES_9_3)) {
+        try (DSLContext create = using(connectionProvider, connectionProvider.getSqlDialect())) {
             Optional<Record2<Integer, String>> optResult = create.transactionResult(configuration -> using(configuration)
                     .select(SKILL.ID, SKILL.NAME)
                     .from(SKILL)
@@ -42,7 +43,7 @@ public class SkillRepositoryImpl implements SkillRepository {
 
     @Override
     public SkillDto getSkillById(Integer id) {
-        try (DSLContext create = using(connectionProvider, SQLDialect.POSTGRES_9_3)) {
+        try (DSLContext create = using(connectionProvider, connectionProvider.getSqlDialect())) {
             Optional<Record2<Integer, String>> optResult = create.transactionResult(configuration -> using(configuration)
                     .select(SKILL.ID, SKILL.NAME)
                     .from(SKILL)
