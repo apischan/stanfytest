@@ -5,6 +5,7 @@ import com.apischan.stanfytest.dto.SkillDto
 import com.apischan.stanfytest.guice.ServiceModule
 import com.apischan.stanfytest.guice.TestDatabaseModule
 import com.apischan.stanfytest.route.RouterChain
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.ObjectMapper
 import ratpack.groovy.test.embed.GroovyEmbeddedApp
 import ratpack.guice.Guice
@@ -24,8 +25,6 @@ class CandidateIntegrationTest extends Specification {
     @Delegate TestHttpClient client = testHttpClient(server)
 
     def setupSpec() {
-        File file = new File(".")
-        println(file.absolutePath)
         db = DriverManager.getConnection("jdbc:h2:mem:jobsdb;" +
                 "DB_CLOSE_DELAY=-1;" +
                 "INIT=" +
@@ -38,44 +37,70 @@ class CandidateIntegrationTest extends Specification {
                     it.module(TestDatabaseModule)
                 } handlers(new RouterChain())
         }
-//        DatabaseManagerSwing.main([ '--url', 'jdbc:h2:mem:jobsdb', '--user', 'sa', '--password', '' ] as String[]);
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+//        DatabaseManagerSwing.main(['--url', 'jdbc:h2:mem:jobsdb', '--user', 'sa', '--password', '' ] as String[]);
     }
 
     def cleanupSpec() {
         db.close()
     }
 
-    def "get one user"() {
-        when:
-        get('candidates/1')
+    def "get one candidates"() {
+        given:
         def candidateDto = CandidateDto.of(1, 'John', 'Travolta')
         candidateDto.setSkills([
                 SkillDto.of(1, 'html'),
                 SkillDto.of(2, 'css'),
                 SkillDto.of(3, 'javascript')
         ])
-
         def jsonCandidate = objectMapper.writeValueAsString(candidateDto)
+
+        when:
+        get('candidates/1')
 
         then:
         response.statusCode == 200
         response.body.text == jsonCandidate
     }
 
-    def "get all users"() {
-        when:
-        get('candidates')
+    def "get all candidates"() {
+        given:
         def candidateDto = CandidateDto.of(3, 'Leonardo', 'DiCaprio')
         candidateDto.setSkills([
                 SkillDto.of(5, 'android'),
                 SkillDto.of(6, 'spring')
         ])
-
         def jsonCandidate = objectMapper.writeValueAsString(candidateDto)
+
+        when:
+        get('candidates')
 
         then:
         response.statusCode == 200
         response.body.text.contains(jsonCandidate)
+    }
+
+    def "save candidate"() {
+        given:
+        def candidateDto = new CandidateDto(firstname: 'Nucolas', lastname: 'Cage')
+        candidateDto.setSkills([
+                new SkillDto(skillName: 'android'),
+                SkillDto.of(6, 'spring')
+        ])
+        def jsonCandidate = objectMapper.writeValueAsString(candidateDto)
+
+        when:
+        def postResponse = requestSpec { spec ->
+            spec.headers.add('Content-Type', 'application/json')
+            spec.body.text(jsonCandidate)
+        }.post('candidate')
+        def getResponse = get('candidates')
+
+
+        then:
+        postResponse.statusCode == 200
+        getResponse.body.text.contains('"firstname":"Nucolas","lastname":"Cage"')
+        getResponse.body.text.contains('"skillName":"android"')
     }
 
 }
