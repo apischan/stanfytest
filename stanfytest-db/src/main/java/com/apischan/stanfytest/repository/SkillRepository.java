@@ -15,6 +15,12 @@ public interface SkillRepository {
      */
     SkillDto getSkillByName(String name);
 
+    /**
+     * Get skill dto by skill name
+     *
+     * @param id skill id
+     * @return skill dto
+     */
     SkillDto getSkillById(Integer id);
 
     /**
