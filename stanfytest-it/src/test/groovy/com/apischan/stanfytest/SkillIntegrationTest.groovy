@@ -23,8 +23,6 @@ class SkillIntegrationTest extends Specification {
     @Delegate TestHttpClient client = testHttpClient(server)
 
     def setupSpec() {
-        File file = new File(".")
-        println(file.absolutePath)
         db = DriverManager.getConnection("jdbc:h2:mem:jobsdb;" +
                 "DB_CLOSE_DELAY=-1;" +
                 "INIT=" +
@@ -37,19 +35,34 @@ class SkillIntegrationTest extends Specification {
                 it.module(TestDatabaseModule)
             } handlers(new RouterChain())
         }
-//        DatabaseManagerSwing.main([ '--url', 'jdbc:h2:mem:jobsdb', '--user', 'sa', '--password', '' ] as String[]);
     }
 
     def cleanupSpec() {
         db.close()
     }
 
-    def "get one skill"() {
+    def "get skill by id"() {
+        given:
+        def skillDto = SkillDto.of(1, 'html')
+        def jsonSkill = objectMapper.writeValueAsString(skillDto)
+
         when:
         get('skills/1')
-        def skillDto = SkillDto.of(1, 'html')
 
+        then:
+        response.statusCode == 200
+        response.body.text == jsonSkill
+    }
+
+    def "get skill by name"() {
+        given:
+        def skillDto = SkillDto.of(1, 'html')
         def jsonSkill = objectMapper.writeValueAsString(skillDto)
+
+        when:
+        params { spec ->
+            spec.put('name', 'html')
+        }.get('skills')
 
         then:
         response.statusCode == 200
@@ -57,11 +70,12 @@ class SkillIntegrationTest extends Specification {
     }
 
     def "get all skill"() {
+        given:
+        def skillDto = SkillDto.of(2, 'css')
+        def jsonSkill = objectMapper.writeValueAsString(skillDto)
+
         when:
         get('skills')
-        def skillDto = SkillDto.of(2, 'css')
-
-        def jsonSkill = objectMapper.writeValueAsString(skillDto)
 
         then:
         response.statusCode == 200
