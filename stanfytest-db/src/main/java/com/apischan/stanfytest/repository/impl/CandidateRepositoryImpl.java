@@ -25,7 +25,7 @@ public class CandidateRepositoryImpl implements CandidateRepository {
     private SkillRepository skillRepository;
 
     @Inject
-    private CandidateRepositoryImpl(JooqConnectionProvider connectionProvider,
+    public CandidateRepositoryImpl(JooqConnectionProvider connectionProvider,
                                     SkillRepository skillRepository) {
         this.connectionProvider = connectionProvider;
         this.skillRepository = skillRepository;
