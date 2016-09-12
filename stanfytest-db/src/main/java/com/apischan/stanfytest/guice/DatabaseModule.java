@@ -8,7 +8,6 @@ import com.apischan.stanfytest.repository.util.JooqConnectionProvider;
 import com.apischan.stanfytest.repository.util.PostgreConnectionProvider;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
-import org.jooq.ConnectionProvider;
 
 public class DatabaseModule extends AbstractModule {
     @Override
