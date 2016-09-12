@@ -1,5 +1,5 @@
 CREATE TABLE skill
 (
     id SERIAL,
-    token VARCHAR(50)
+    name VARCHAR(50)
 );
