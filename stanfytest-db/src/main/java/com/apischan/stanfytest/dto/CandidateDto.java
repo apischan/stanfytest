@@ -13,6 +13,6 @@ public class CandidateDto {
     private @NonNull Integer id;
     private @NonNull String firstname;
     private @NonNull String lastname;
-    private List<SkillDto> skills = Collections.emptyList();
+    private @NonNull List<SkillDto> skills = Collections.emptyList();
 
 }
