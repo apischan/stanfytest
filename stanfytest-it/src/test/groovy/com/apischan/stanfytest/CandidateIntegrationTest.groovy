@@ -84,7 +84,7 @@ class CandidateIntegrationTest extends Specification {
         given:
         def candidateDto = new CandidateDto(firstname: 'Nucolas', lastname: 'Cage')
         candidateDto.setSkills([
-                new SkillDto(skillName: 'android'),
+                new SkillDto(skillName: 'linux'),
                 SkillDto.of(6, 'spring')
         ])
         def jsonCandidate = objectMapper.writeValueAsString(candidateDto)
@@ -100,7 +100,7 @@ class CandidateIntegrationTest extends Specification {
         then:
         postResponse.statusCode == 200
         getResponse.body.text.contains('"firstname":"Nucolas","lastname":"Cage"')
-        getResponse.body.text.contains('"skillName":"android"')
+        getResponse.body.text.contains('"skillName":"linux"')
     }
 
 }
