@@ -46,8 +46,9 @@ public final class SkillHandlers {
             if (queryParams.containsKey(QueryParamTokens.NAME.token)) {
                 String name = queryParams.get(QueryParamTokens.NAME.token);
                 ctx.render(json(skillService.getSkillByName(name)));
+            } else {
+                ctx.render(json(skillService.getAllSkills()));
             }
-            ctx.render(json(skillService.getAllSkills()));
         }
 
         private enum QueryParamTokens {
