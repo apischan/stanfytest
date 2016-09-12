@@ -7,13 +7,12 @@ import com.apischan.stanfytest.repository.util.JooqConnectionProvider;
 import com.google.inject.Inject;
 import org.jooq.DSLContext;
 import org.jooq.Record2;
-import org.jooq.SQLDialect;
 
 import java.util.List;
 import java.util.Optional;
 
 import static com.apischan.stanfytest.jooq.Tables.SKILL;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 import static org.jooq.impl.DSL.using;
 
 public class SkillRepositoryImpl implements SkillRepository {
@@ -67,7 +66,7 @@ public class SkillRepositoryImpl implements SkillRepository {
 
     @Override
     public List<SkillDto> getAllSkills() {
-        try (DSLContext create = using(connectionProvider, SQLDialect.POSTGRES_9_3)) {
+        try (DSLContext create = using(connectionProvider, connectionProvider.getSqlDialect(), connectionProvider.getSettings())) {
             return create.transactionResult(configuration ->
                     using(configuration)
                     .select(SKILL.ID, SKILL.NAME)
