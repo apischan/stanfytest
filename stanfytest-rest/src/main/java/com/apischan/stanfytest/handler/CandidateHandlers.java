@@ -1,7 +1,6 @@
 package com.apischan.stanfytest.handler;
 
 import com.apischan.stanfytest.dto.CandidateDto;
-import com.apischan.stanfytest.dto.SkillDto;
 import com.apischan.stanfytest.service.CandidateService;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

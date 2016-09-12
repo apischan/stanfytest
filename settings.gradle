@@ -1,3 +1,5 @@
 rootProject.name = 'stanfytest'
-include 'stanfytest-rest', 'stanfytest-db'
+include 'stanfytest-rest'
+include 'stanfytest-db'
+include 'stanfytest-it'
 

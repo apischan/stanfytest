@@ -1,0 +1,17 @@
+group 'com.apischan.stanfytest'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.h2database:h2:1.4.192'
+    compile 'org.hsqldb:sqltool:2.3.4'
+    compile 'org.hsqldb:hsqldb:2.3.4'
+
+    compile 'io.ratpack:ratpack-core:1.4.1'
+    compile 'io.ratpack:ratpack-guice:1.4.1'
+    compile 'io.ratpack:ratpack-test:1.4.1'
+    compile 'io.ratpack:ratpack-groovy-test:1.4.1'
+}
