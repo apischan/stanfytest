@@ -27,7 +27,7 @@ public class SkillRepositoryImpl implements SkillRepository {
 
     @Override
     public SkillDto getSkillByName(String name) {
-        try (DSLContext create = using(connectionProvider, connectionProvider.getSqlDialect())) {
+        try (DSLContext create = using(connectionProvider, connectionProvider.getSqlDialect(), connectionProvider.getSettings())) {
             Optional<Record2<Integer, String>> optResult = create.transactionResult(configuration -> using(configuration)
                     .select(SKILL.ID, SKILL.NAME)
                     .from(SKILL)
@@ -42,7 +42,7 @@ public class SkillRepositoryImpl implements SkillRepository {
 
     @Override
     public SkillDto getSkillById(Integer id) {
-        try (DSLContext create = using(connectionProvider, connectionProvider.getSqlDialect())) {
+        try (DSLContext create = using(connectionProvider, connectionProvider.getSqlDialect(), connectionProvider.getSettings())) {
             Optional<Record2<Integer, String>> optResult = create.transactionResult(configuration -> using(configuration)
                     .select(SKILL.ID, SKILL.NAME)
                     .from(SKILL)
