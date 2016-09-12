@@ -114,7 +114,7 @@ public class CandidateRepositoryImpl implements CandidateRepository {
                         ),
                         mapping(r -> SkillDto.of(
                                 r.getValue(SKILL.ID),
-                                r.getValue(SKILL.NAME, String.class)
+                                r.getValue(SKILL.NAME)
                         ), toList())
                 ));
     }
