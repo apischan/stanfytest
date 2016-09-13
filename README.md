@@ -37,3 +37,25 @@ user@host:~/stanfytest$ cd docker/
 user@host:~/stanfytest/docker$ docker-compose up
 ```
 Application will be available under http://localhost:8082
+
+### Example of payload for storing candidate:
+(Note: put id only for existing skills)
+```javascript
+{
+  "firstname": "John",
+  "lastname": "Travolta",
+  "skills": [
+    {
+      "id": 1,
+      "skillName": "html"
+    },
+    {
+      "id": 2,
+      "skillName": "css"
+    },
+    {
+      "skillName": "erlang"
+    }
+  ]
+}
+```
