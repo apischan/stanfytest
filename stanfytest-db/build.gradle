@@ -59,6 +59,8 @@ jooq {
     }
 }
 
+generateSampleJooqSchemaSource.enabled = false
+
 dependencies {
     compile 'org.jooq:jooq:3.8.4'
     compile 'com.zaxxer:HikariCP:2.5.0'
