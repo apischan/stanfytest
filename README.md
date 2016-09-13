@@ -1,7 +1,7 @@
 # stanfytest
 
 ### Application area:
-Application provides REST API for storing and retreiving candidates (for some vacancies) and their skills.
+Application provides REST API for storing and retrieving candidates (for some vacancies) and their skills.
 
 ### Frameworks and tools:
 * **Java 8** - as main language
