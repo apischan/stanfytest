@@ -14,7 +14,7 @@ public class PostgreConnectionProvider implements JooqConnectionProvider {
     private SQLDialect sqlDialect = SQLDialect.POSTGRES_9_3;
 
     public PostgreConnectionProvider() {
-        HikariConfig config = new HikariConfig("stanfytest-db/src/main/resources/hikari.properties");
+        HikariConfig config = new HikariConfig("hikari.properties");
         ds = new HikariDataSource(config);
     }
 
