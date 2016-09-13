@@ -3,6 +3,8 @@ version: '2'
 volumes:
   pg_data:
 
+networks:
+  jobs_rest_network:
 
 services:
   postgres_jobs:
@@ -19,3 +21,17 @@ services:
       POSTGRES_DB: jobsdb
     ports:
       - 12658:5432
+    networks:
+      jobs_rest_network:
+
+  rest_jobs:
+    build:
+      context: ../stanfytest-rest
+    image: docker_jobs_rest
+    container_name: rest_jobs
+    ports:
+      - 8082:5050
+    networks:
+      jobs_rest_network:
+    restart:
+      always
