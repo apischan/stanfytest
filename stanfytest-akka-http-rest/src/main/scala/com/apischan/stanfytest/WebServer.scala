@@ -1,21 +1,11 @@
 package com.apischan.stanfytest
 
-import akka.Done
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import akka.http.scaladsl.model._
-import akka.http.scaladsl.server.Directives._
+import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 
 import scala.io.StdIn
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
-import akka.http.scaladsl.server.Route
-import spray.json._
-
-import scala.concurrent.Future
-
-//import scala.concurrent.ExecutionContext.Implicits.global
 
 object WebServer {
 
