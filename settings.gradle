@@ -1,5 +1,5 @@
 rootProject.name = 'stanfytest'
-include 'stanfytest-rest'
 include 'stanfytest-db'
 include 'stanfytest-it'
+include 'stanfytest-akka-http-rest'
 

@@ -1,0 +1,15 @@
+group 'com.apischan.stanfytest'
+version '1.0-SNAPSHOT'
+
+repositories {
+    jcenter()
+}
+
+apply plugin: 'scala'
+
+dependencies {
+    compile 'com.typesafe.akka:akka-http-experimental_2.11:2.4.11'
+    compile 'com.typesafe.akka:akka-http-spray-json-experimental_2.11:2.4.11'
+
+    compile 'org.scala-lang:scala-library:2.11.8'
+}
