@@ -12,7 +12,7 @@ Application provides REST API for storing and retrieving candidates (for some va
 * **JOOQ** - for querying database
 * **HikariCP** - as connection pool
 * **Slf4J/Logback** - for logging
-* **Gradle** - ad build tool
+* **Gradle** - as build tool
 * **Docker** - containerizer for deployment
 * **Lombok** - for generation of boilerplate code
 * **Spock** - for integration tests
