@@ -14,8 +14,8 @@ class CandidateService(val candidateRepository: CandidateRepository) {
     candidateRepository.getAllCandidates.asScala.toList.map(java2ScalaCandidate)
   }
 
-  def findCandidateById(id: Int): Future[Candidate] = Future {
-    candidateRepository.getCandidateById(id)
+  def findCandidateById(id: Int): Future[Option[Candidate]] = Future {
+    Option(candidateRepository.getCandidateById(id))
   }
 
   def saveCandidate(candidate: Candidate): Future[Done] = Future {
